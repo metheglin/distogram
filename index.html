@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  
+  <style>
+    .diagram { border: 1px solid black; }
+  </style>
+
+</head>
+<body>
+
+  <canvas id="distogram" class="diagram"
+    width="500" height="500"></canvas>
+  <canvas id="histogram" class="diagram"
+    width="500" height="500"></canvas>
+
+  <script type="text/javascript" src="./class.js"></script>
+  <script type="text/javascript" src="./vector2.js"></script>
+  <script type="text/javascript" src="./canvas.js"></script>
+  <script type="text/javascript" src="./distribution.js"></script>
+  <script type="text/javascript">
+    var dist = Distribution.find('distogram');
+    dist.showGrid(10, 10);
+
+    var samples = 100000;
+    for ( var i=0; i<samples; i++ ) {
+      var rand_x = Distribution.rand( dist.attr('width') );
+      var rand_y = Distribution.rand( dist.attr('height') );
+      dist.distribute(new Vector2(rand_x, rand_y));
+    }
+    dist.histogramize(20);
+    dist.histogramize2();
+
+    var hist = Canvas.find('histogram');
+    var space_x = Math.floor(hist.attr('width')/(dist.maxHisto() - dist.minHisto()));
+    hist.showGrid(space_x, 10);
+    for ( var i=0; i<dist.histgram2.length; i++ ) {
+      hist.ctx.fillRect(i * space_x, 500, space_x, -2 * dist.histgram2[i]);
+      
+    }
+
+  </script>
+  
+</body>
+</html>
